@@ -1,16 +1,6 @@
-data "aws_ami" "amazon_linux_2" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm*"]
-  }
+variable "ubuntu" {
+  type = string
+  default = "ami-0e84e211558a022c0"
 }
 
 variable "aws_autoscaling_group_name" {
@@ -106,7 +96,7 @@ variable "aws_iam_policy_2_name" {
   description = "Policy that allows basic CloudWatch Logs actions"
 }
 
-variable "aws_iam_policy_2_json" {
+variable "aws_iam_policy_2_json_bak" {
   type        = string
   description = "Policy that allows basic CloudWatch Logs actions"
   default     = <<EOF
@@ -127,7 +117,24 @@ variable "aws_iam_policy_2_json" {
 }
 EOF
 }
-
+variable "aws_iam_policy_2_json" {
+  type        = string
+  description = "Policy that allows basic CloudWatch Logs actions"
+  default     = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "logs:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
 variable "aws_iam_instance_profile_name" {
   type        = string
   description = "The instance profile that will be attached to our vulnerable web application"

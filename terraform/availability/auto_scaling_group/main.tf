@@ -34,7 +34,7 @@ resource "aws_autoscaling_group" "aws_autoscaling_group" {
 
 resource "aws_launch_configuration" "aws_launch_configuration" {
   iam_instance_profile = aws_iam_instance_profile.aws_iam_instance_profile.arn
-  image_id             = data.aws_ami.amazon_linux_2.id
+  image_id             = var.ubuntu
   instance_type        = var.instance_type
   name                 = var.aws_launch_configuration_name
   security_groups      = [var.security_group_id]
