@@ -186,6 +186,31 @@ module "rds" {
   password              = var.password
 }
 
+module "bucket_policy_images" {
+  source = "./iam/s3_bucket_policy"
+
+
+  s3_bucket = module.s3_wordpress_images.s3.id
+  s3_bucket_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": [
+        "s3:GetObject"
+        ],
+      "Resource": [
+        "${module.s3_wordpress_images.s3.arn}/*"
+        ]
+    }
+  ]
+}
+EOF
+}
+
 module "auto_scaling_group" {
   source = "./availability/auto_scaling_group"
 
