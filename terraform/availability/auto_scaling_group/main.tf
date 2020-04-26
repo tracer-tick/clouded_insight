@@ -8,6 +8,7 @@ resource "aws_autoscaling_group" "aws_autoscaling_group" {
   target_group_arns     = var.alb_target_group_arns
   vpc_zone_identifier   = var.public_subnet_ids
   wait_for_elb_capacity = 1
+  health_check_grace_period = 300
 
   enabled_metrics = [
     "GroupDesiredCapacity",
