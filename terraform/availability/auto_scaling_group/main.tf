@@ -39,7 +39,7 @@ resource "aws_launch_configuration" "aws_launch_configuration" {
   instance_type        = var.instance_type
   name                 = var.aws_launch_configuration_name
   security_groups      = [var.security_group_id]
-  user_data            = file("../misc/user_data.sh")
+  user_data            = file("../misc/user_data_reader.sh")
   
 }
 

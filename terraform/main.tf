@@ -167,50 +167,50 @@ module "s3_wordpress_images" {
   region      = var.wordpress_images_bucket_region
 }
 
-module "cloudfront" {
-  source = "./networking/cloudfront"
-
-  image_bucket_name = module.s3_wordpress_images.s3.bucket_regional_domain_name
-  origin_id         = "S3-${module.s3_wordpress_images.s3.bucket}"
-  region            = "us-east-2"
-}
-
-module "rds" {
-  source = "./storage/rds"
-
-  rds_subnet_group_ids  = module.networking.private_subnets.*.id
-  rds_engine_type       = "mysql"
-  rds_engine_version    = "5.7"
-  rds_security_group    = module.security_group_rds.aws_security_group.id
-  username              = var.username
-  password              = var.password
-}
-
-module "bucket_policy_images" {
-  source = "./iam/s3_bucket_policy"
-
-
-  s3_bucket = module.s3_wordpress_images.s3.id
-  s3_bucket_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "PublicReadGetObject",
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": [
-        "s3:GetObject"
-        ],
-      "Resource": [
-        "${module.s3_wordpress_images.s3.arn}/*"
-        ]
-    }
-  ]
-}
-EOF
-}
-
+//module "cloudfront" {
+//  source = "./networking/cloudfront"
+//
+//  image_bucket_name = module.s3_wordpress_images.s3.bucket_regional_domain_name
+//  origin_id         = "S3-${module.s3_wordpress_images.s3.bucket}"
+//  region            = "us-east-2"
+//}
+//
+//module "rds" {
+//  source = "./storage/rds"
+//
+//  rds_subnet_group_ids  = module.networking.private_subnets.*.id
+//  rds_engine_type       = "mysql"
+//  rds_engine_version    = "5.7"
+//  rds_security_group    = module.security_group_rds.aws_security_group.id
+//  username              = var.username
+//  password              = var.password
+//}
+//
+//module "bucket_policy_images" {
+//  source = "./iam/s3_bucket_policy"
+//
+//
+//  s3_bucket = module.s3_wordpress_images.s3.id
+//  s3_bucket_policy = <<EOF
+//{
+//  "Version": "2012-10-17",
+//  "Statement": [
+//    {
+//      "Sid": "PublicReadGetObject",
+//      "Effect": "Allow",
+//      "Principal": "*",
+//      "Action": [
+//        "s3:GetObject"
+//        ],
+//      "Resource": [
+//        "${module.s3_wordpress_images.s3.arn}/*"
+//        ]
+//    }
+//  ]
+//}
+//EOF
+//}
+//
 module "auto_scaling_group" {
   source = "./availability/auto_scaling_group"
 
@@ -231,21 +231,21 @@ module "auto_scaling_group" {
   s3_wp_code_bucket_arn                   = module.s3_wordpress_code.s3.arn
   s3_wp_media_bucket_arn                  = module.s3_wordpress_images.s3.arn
 }
-//output "vpc" {
-//  value = module.networking.vpc
-//}
+////output "vpc" {
+////  value = module.networking.vpc
+////}
+////
+////output "subnets" {
+////  value = module.networking.public_subnets.*.id
+////}
 //
-//output "subnets" {
-//  value = module.networking.public_subnets.*.id
+////output "alb-sg" {
+////  value = module.security_group_alb.aws_security_group.id
+////}
+//
+//output "public" {
+//  value = module.networking.public_subnets
 //}
-
-//output "alb-sg" {
-//  value = module.security_group_alb.aws_security_group.id
+//output "rds" {
+//  value = module.rds.rds
 //}
-
-output "public" {
-  value = module.networking.public_subnets
-}
-output "rds" {
-  value = module.rds.rds
-}

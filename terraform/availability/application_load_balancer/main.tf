@@ -33,3 +33,8 @@ resource "aws_lb_target_group" "alb_target_group" {
     matcher = "200"
   }
 }
+
+resource "aws_lb_listener_certificate" "example" {
+  listener_arn    = aws_lb_listener.alb_listener.arn
+  certificate_arn = "arn:aws:acm:us-east-2:965762333389:certificate/f2b9a174-e3d0-4d63-a08a-b8f8f431f2ed"
+}
